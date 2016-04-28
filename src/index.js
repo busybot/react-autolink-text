@@ -9,14 +9,15 @@ export default class AutoLinkText extends React.Component {
   render() {
     const text = this.props.text || '';
     const target = this.props.target || '_blank';
+    const rel = this.props.rel || 'noreferrer noopener';
 
     return (
-      <span>{matchParser(text)::prepareElements(text, target)::truncate(this.props.maxLength)::keyElements()}</span>
+      <span>{matchParser(text)::prepareElements(text, target, rel)::truncate(this.props.maxLength)::keyElements()}</span>
     );
   }
 }
 
-function prepareElements(text, target) {
+function prepareElements(text, target, rel) {
   let elements = [];
   let lastIndex = 0;
 
@@ -24,7 +25,7 @@ function prepareElements(text, target) {
     if (match.position.start !== 0) {
       elements.push(<span>{text.slice(lastIndex, match.position.start)}</span>);
     }
-    elements.push(<a target={target} href={match.getAnchorHref()}>{match.getAnchorText()}</a>);
+    elements.push(<a target={target} rel={rel} href={match.getAnchorHref()}>{match.getAnchorText()}</a>);
     lastIndex = match.position.end;
   });
 
